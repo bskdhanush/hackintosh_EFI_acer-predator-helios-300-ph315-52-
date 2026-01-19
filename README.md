@@ -1,71 +1,65 @@
-# Acer Predator Hackintosh (Intel 9th Gen) - OpenCore Support 
-EFI will work with MAC os Tahoe
+# Acer Predator Hackintosh (Intel 9th Gen) - OpenCore
 
-This repository contains the EFI folder for the **Acer Predator** with an Intel 9th Gen processor (i7-9750H).
+This repository provides an OpenCore EFI folder specifically tuned for the **Acer Predator** with an Intel 9th Gen processor. This configuration is confirmed working with **macOS 26 Tahoe**, the final macOS release with native Intel support.
 
 ## 💻 System Specifications
 * **CPU:** Intel® Core™ i7-9750H (Coffee Lake)
 * **iGPU:** Intel® UHD Graphics 630
-* **dGPU:** NVIDIA GTX 1660 Ti (**Disabled**)
-* **Bootloader:** OpenCore
+* **dGPU:** NVIDIA GTX 1660 Ti (**Disabled** - Not supported)
+* **Target OS:** macOS 26 Tahoe (and earlier)
 
 ---
 
-## 🛠 1. Prepare the macOS Installer (macrecovery)
+## 🛠 1. Download macOS (macrecovery)
 
-Since this repo only provides the EFI, you need to download the macOS recovery files using the OpenCore `macrecovery` tool.
+To get the official macOS Tahoe recovery files, use the `macrecovery` script included in the OpenCore package.
 
-1.  Open your terminal/command prompt and navigate to your `EFI/OC/Utilities/macrecovery/` folder.
-2.  Run the following command to download **macOS Sonoma** (or your preferred version):
-    * **Windows:** `python3 macrecovery.py -b macosx14 -m 00000000000000000 download`
-    * **macOS/Linux:** `./macrecovery.py -b macosx14 -m 00000000000000000 download`
-3.  Once finished, you will see two files: `BaseSystem.dmg` and `BaseSystem.chunklist`.
-4.  Create a folder named `com.apple.recovery.boot` on the root of your USB drive and move those two files into it.
+1.  Navigate to your `EFI/OC/Utilities/macrecovery/` folder in a terminal.
+2.  Run the download command for **macOS Tahoe (macosx26)**:
+    * **Windows:** `python3 macrecovery.py -b macosx26 -m 00000000000000000 download`
+    * **macOS/Linux:** `./macrecovery.py -b macosx26 -m 00000000000000000 download`
+3.  Create a folder on your USB root called `com.apple.recovery.boot`.
+4.  Move the resulting `BaseSystem.dmg` and `BaseSystem.chunklist` into that folder.
 
 ---
 
-## 🔑 2. SMBIOS Setup (GenSMBIOS)
+## 🔑 2. Generate Serial Numbers (GenSMBIOS)
 
-You must generate unique serial numbers to use Apple Services.
+Do not use the EFI without generating a unique serial first, or your Apple ID could be flagged.
 
-1.  Download and run [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS).
-2.  Select Option `2` to select your `config.plist`.
+1.  Open **GenSMBIOS-master**.
+2.  Select Option `2` and point it to this repo's `EFI/OC/config.plist`.
 3.  Select Option `3` and enter `MacBookPro15,1`.
-4.  Verify the serial on [Apple’s Check Coverage](https://checkcoverage.apple.com/) page; it should say "Invalid Serial" (this means it's safe to use).
+4.  Check your new serial on [Apple's Coverage Site](https://checkcoverage.apple.com/). If it says "Invalid Serial," you are good to go.
 
 ---
 
 ## 🚀 3. Installation Steps
 
-1.  **USB Layout:** Your USB drive should look like this:
-    * `USB/EFI/` (Contains the BOOT and OC folders from this repo)
-    * `USB/com.apple.recovery.boot/` (Contains BaseSystem files)
-2.  **BIOS Settings:**
-    * **SATA Mode:** AHCI
+1.  **BIOS Config:**
+    * **SATA Mode:** AHCI (Required)
     * **Secure Boot:** Disabled
     * **VT-d:** Disabled
-3.  **Boot:** Restart your laptop, tap `F12` to enter the Boot Menu, and select your USB.
-4.  **Install:** Select "Install macOS" from the OpenCore picker. Use **Disk Utility** to format your target drive as `APFS` with a `GUID Partition Map`.
+2.  **Booting:** Plug in the USB and boot from it. Choose "Install macOS Tahoe" in the OpenCore menu.
+3.  **Drive Prep:** In Disk Utility, format your internal SSD as **APFS** with **GUID Partition Map**.
+4.  **Install:** Follow the prompts. The system will reboot 3–4 times.
 
 ---
 
 ## 🛠 4. Post-Install (Wi-Fi & Bluetooth)
 
-Once you reach the desktop, your Wi-Fi and Bluetooth might not be active yet if they require root patches (common for Intel or Broadcom cards in newer macOS versions).
+In macOS Tahoe, certain Wi-Fi and Bluetooth cards require root patching to function.
 
-1.  **Download OpenCore Legacy Patcher (OCLP):** Download the latest GUI version.
-2.  **Apply Root Patches:**
-    * Open OCLP and click on **"Post-Install Root Patch"**.
-    * If your hardware is detected, click **"Start Root Patching"**.
-3.  **Reboot:** After the patching process finishes, reboot your system. Your Wi-Fi and Bluetooth should now be functional.
-
-
+1.  Download the latest [OpenCore Legacy Patcher (OCLP)](https://github.com/dortania/OpenCore-Legacy-Patcher/releases).
+2.  Open the app and select **"Post-Install Root Patch"**.
+3.  Click **"Start Root Patching"**. This will re-inject the legacy drivers for your Intel/Killer wireless card.
+4.  Reboot your laptop.
 
 ---
 
 ## ✅ Current Status
-* **Working:** UHD 630 Graphics, Audio, Trackpad (I2C), Sleep/Wake.
-* **Not Working:** NVIDIA GTX 1660 Ti (Disabled for stability).
+* **Working:** Liquid Glass UI, Spotlight, Audio, Trackpad (I2C), Wi-Fi, Sleep/Wake.
+* **Disabled:** GTX 1660 Ti (NVIDIA Turing is not supported in macOS).
 
 ---
-**Disclaimer:** Use at your own risk. 
+**Disclaimer:** This is for educational use.
