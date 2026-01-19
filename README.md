@@ -62,4 +62,4 @@ In macOS Tahoe, certain Wi-Fi and Bluetooth cards require root patching to funct
 * **Disabled:** GTX 1660 Ti (NVIDIA Turing is not supported in macOS).
 
 ---
-**Disclaimer:** This is for educational use.
+
