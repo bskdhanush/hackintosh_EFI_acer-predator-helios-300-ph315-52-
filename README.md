@@ -1,6 +1,6 @@
 # Acer Predator Hackintosh (Intel 9th Gen) - OpenCore
 
-This repository provides an OpenCore EFI folder specifically tuned for the **Acer Predator** with an Intel 9th Gen processor. This configuration is confirmed working with **macOS 26 Tahoe**, the final macOS release with native Intel support.
+This repository provides an OpenCore EFI folder specifically tuned for the **Acer Predator** with an Intel 9th Gen processor. This configuration is confirmed working with #**macOS 26 Tahoe**, the final macOS release with native Intel support.
 
 ## 💻 System Specifications
 * **CPU:** Intel® Core™ i7-9750H (Coffee Lake)
